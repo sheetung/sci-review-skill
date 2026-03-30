@@ -141,6 +141,8 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
 - Check terminology consistency, tense consistency, and section-heading parallelism.
 - Flag abrupt paragraphing, especially unnecessary one-sentence paragraphs.
 - Prefer neutral scientific wording over colloquial transitions.
+- Flag subjective or weakly justified wording such as `favorable`, `arbitrary`, and similar terms when they are used without precise technical support.
+- Prefer rigorous scientific wording over evaluative or casual wording.
 - When commenting, suggest whether to merge paragraphs, replace colloquial phrases, or standardize tense and terminology.
 
 ## Review Style

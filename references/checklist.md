@@ -125,6 +125,7 @@ This note summarizes a reusable SCI review checklist for control, robotics, and 
 - Are paragraphs generally multi-sentence and well developed?
 - Are there abrupt one-sentence paragraphs that should be merged or expanded?
 - Is the wording neutral, scientific, and free of avoidable colloquial phrasing?
+- Are subjective or weakly justified words such as `favorable`, `arbitrary`, and similar expressions avoided unless they are precisely defined or technically supported?
 - If weak, suggest whether to merge paragraphs, standardize tense, or replace colloquial wording.
 
 ## 16. Final Submission Sanity Check
