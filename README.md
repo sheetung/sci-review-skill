@@ -38,13 +38,13 @@ Codex discovers skills from `~/.codex/skills/<name>/SKILL.md`.
 ### Option 1: clone directly into your skills directory
 
 ```powershell
-git clone git@github.com:sheetung/sci-review-skill.git $HOME\.codex\skills\sci-review
+git clone https://github.com/sheetung/sci-review-skill.git $HOME\.codex\skills\sci-review
 ```
 
 ### Option 2: clone elsewhere and copy the skill folder
 
 ```powershell
-git clone git@github.com:sheetung/sci-review-skill.git $HOME\sci-review-skill
+git clone https://github.com/sheetung/sci-review-skill.git $HOME\sci-review-skill
 Copy-Item -Recurse $HOME\sci-review-skill $HOME\.codex\skills\sci-review
 ```
 
@@ -65,7 +65,7 @@ OpenCode can discover skills from locations such as:
 ### Option 1: project-local install
 
 ```powershell
-git clone git@github.com:sheetung/sci-review-skill.git $HOME\sci-review-skill
+git clone https://github.com/sheetung/sci-review-skill.git $HOME\sci-review-skill
 New-Item -ItemType Directory -Force .opencode\skills | Out-Null
 Copy-Item -Recurse $HOME\sci-review-skill .opencode\skills\sci-review
 ```
@@ -73,7 +73,7 @@ Copy-Item -Recurse $HOME\sci-review-skill .opencode\skills\sci-review
 ### Option 2: global install
 
 ```powershell
-git clone git@github.com:sheetung/sci-review-skill.git $HOME\sci-review-skill
+git clone https://github.com/sheetung/sci-review-skill.git $HOME\sci-review-skill
 New-Item -ItemType Directory -Force $HOME\.config\opencode\skills | Out-Null
 Copy-Item -Recurse $HOME\sci-review-skill $HOME\.config\opencode\skills\sci-review
 ```
