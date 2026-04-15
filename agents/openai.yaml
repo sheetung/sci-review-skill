@@ -1,4 +1,4 @@
 interface:
   display_name: "SCI Review"
-  short_description: "Review SCI manuscripts with English SCI standards and Chinese comments."
-  default_prompt: "Use $sci-review to review this manuscript with standard English SCI review criteria, and output the comments and revision suggestions in Chinese using clear Markdown section headings and bullet points."
+  short_description: "Review SCI manuscripts with script-assisted checks and Chinese comments."
+  default_prompt: "Use $sci-review to review this manuscript with standard English SCI review criteria, run the bundled checks when possible, and output the comments and revision suggestions in Chinese using clear Markdown section headings and bullet points."

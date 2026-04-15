@@ -2,6 +2,13 @@
 
 This note summarizes a reusable SCI review checklist for control, robotics, and nonlinear systems papers. Use it in reviewer order: global issues first, then section-by-section review, then cross-cutting formatting and writing checks. Keep the review criteria aligned with normal English SCI manuscript standards, but the final review comments can be presented in Chinese. For each part, do not only identify the problem; also state a reasonable revision direction.
 
+When available, deterministic helper scripts can be used before manual review:
+
+- `scripts/check_refs.py` for label/reference checks
+- `scripts/check_wording.py` for subjective wording checks
+- `scripts/check_tex_structure.py` for template and paragraph-structure checks
+- `scripts/check_citations.py` for citation-key consistency checks across `.bib` files and inline `thebibliography` / `\bibitem` entries
+
 ## 1. Global Issues
 
 - Is the research problem clear and technically meaningful?
@@ -79,6 +86,7 @@ This note summarizes a reusable SCI review checklist for control, robotics, and 
 - Are entries complete, retrievable, and consistently formatted?
 - Are key recent papers included where necessary?
 - Do cited references genuinely support nearby claims?
+- Are citation keys consistent with the actual bibliography source, whether it is an external `.bib` file or inline `thebibliography` entries in the `.tex` source?
 - If author number is greater than 3, use `et al.` where required by style.
 - If weak, suggest whether to add recent literature, complete missing fields, or replace weak citations.
 
@@ -134,6 +142,7 @@ This note summarizes a reusable SCI review checklist for control, robotics, and 
 - Remove metadata placeholders before submission.
 - Recheck figure, table, theorem, and equation numbering after float adjustments.
 - Recheck labels, cross-references, and citation commands after major edits.
+- Recheck that all cited keys exist in the active bibliography source, including inline `\bibitem` entries if no `.bib` file is used.
 
 ## 17. Minimal Self-Review Questions
 

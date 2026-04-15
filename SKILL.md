@@ -13,13 +13,21 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
 - Prefer the main `.tex` file.
 - If there are multiple versions, inspect the one the user explicitly names.
 
-2. Start with global issues.
+2. Run deterministic helper scripts when possible.
+- If Python is available, run `scripts/check_refs.py <main.tex>` first to detect label/reference issues, hard-coded numbering, missing labels, undefined references, and unused labels.
+- If Python is available, run `scripts/check_wording.py <main.tex>` to detect subjective or weakly justified wording such as `favorable`, `arbitrary`, `obviously`, and similar terms.
+- If Python is available, run `scripts/check_tex_structure.py <main.tex>` to detect template leftovers, hard-coded section references, and likely single-sentence paragraphs.
+- If Python is available, run `scripts/check_citations.py <main.tex>` to detect missing citation keys, duplicate bibliography keys, unused bibliography entries, and inconsistencies in either `.bib` sources or inline `thebibliography` / `\bibitem` sources.
+- Use script findings as precise evidence with line numbers, then interpret them with reviewer judgment rather than copying them blindly.
+- If Python is unavailable, fall back to manual review and say that the deterministic checks were not run.
+
+3. Start with global issues.
 - Check whether the research problem is clear.
 - Check whether the claimed contribution matches the actual content.
 - Check whether the manuscript is logically closed from problem statement to method, theory, and validation.
 - Flag major technical or structural risks before local wording issues.
 
-3. Then review in SCI writing order.
+4. Then review in SCI writing order.
 - Title, abstract, and keywords
 - Introduction
 - Problem formulation / preliminaries / assumptions
@@ -30,18 +38,62 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
 - Conclusion
 - References
 
-4. After the section review, run cross-cutting checks.
+5. After the section review, run cross-cutting checks.
 - Equations and formula presentation
 - Notation consistency
 - Figures and tables
 - Language, tense, and paragraph structure
 
-5. For each section, always provide both diagnosis and revision direction.
+6. For each section, always provide both diagnosis and revision direction.
 - Do not stop at "this part is weak."
 - Say what is wrong, why it matters, and how it should be revised.
 - Prefer practical revision guidance such as reordering, merging, clarifying, defining, tightening claims, or rewriting specific sentence types.
 - If the issue is local, give a local fix.
 - If the issue is structural, give a structural fix.
+
+## Script Helpers
+
+### `scripts/check_refs.py`
+
+- Use this script for label-based cross-reference checks in LaTeX.
+- It detects:
+  - hard-coded figure, table, equation, and section numbers
+  - undefined references
+  - unused labels
+  - duplicate labels
+  - figure, table, and equation environments without labels
+
+### `scripts/check_wording.py`
+
+- Use this script to scan for subjective or weakly justified academic wording.
+- It detects configured expressions such as:
+  - `favorable`
+  - `arbitrary`
+  - `obviously`
+  - `clearly`
+  - `it is easy to see`
+  - simple informal evaluative words such as `good`, `bad`, and `excellent`
+
+### `scripts/check_tex_structure.py`
+
+- Use this script to detect simple structural issues that benefit from deterministic checks.
+- It detects:
+  - template leftovers such as `Article Type` and example dates
+  - hard-coded section references
+  - likely single-sentence paragraphs
+
+### `scripts/check_citations.py`
+
+- Use this script for citation-to-bibliography consistency checks in LaTeX.
+- It detects:
+  - cited keys that are not defined in the loaded bibliography sources
+  - duplicate BibTeX keys in `.bib` files
+  - duplicate `\bibitem` keys inside inline `thebibliography` environments
+  - keys that exist in both `.bib` files and inline bibliography sources
+  - bibliography entries that are never cited
+- Treat both bibliography styles as valid inputs:
+  - BibTeX or biblatex sources loaded from `.bib` files
+  - inline bibliography entries written directly in the `.tex` source through `thebibliography` and `\bibitem`
 
 ## Section Checks
 
@@ -107,6 +159,7 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
 
 - Check whether references are complete, current, and consistently formatted.
 - Check whether key claims are supported by the cited literature.
+- Check whether citation keys are consistent with either loaded `.bib` files or inline `\bibitem` entries when the manuscript does not use an external bibliography database.
 - When commenting, suggest whether to add recent references, complete missing bibliographic fields, or replace weak citations.
 
 ## Cross-Cutting Checks
@@ -170,6 +223,7 @@ Read `references/checklist.md` when:
 - Prefer short section headers, short paragraphs, and flat bullet lists.
 - Avoid producing one long wall of text.
 - Group comments into visually clear sections so the user can scan them quickly.
+- If helper scripts were run, summarize their most relevant findings with line numbers before or within the relevant review sections.
 - For each reviewed part, provide:
   - what is good enough, if relevant
   - what is wrong or weak
