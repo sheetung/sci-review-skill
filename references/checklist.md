@@ -124,6 +124,7 @@ When available, deterministic helper scripts can be used before manual review:
 - Do figures and tables summarize evidence instead of duplicating nearby text?
 - Are table metric names short, accurate, and statistically correct?
 - Check whether figure and table references in the main text use labels such as `Fig.~\ref{...}` and `Table~\ref{...}` instead of hard-coded numbers.
+- Check whether every displayed figure and table is actually cited in the surrounding main text.
 - If weak, suggest whether to tighten captions, rename metrics, replace hard-coded numbers with label references, or rewrite the discussion around the visuals.
 
 ## 15. Language and Structure
@@ -153,5 +154,6 @@ Before submission, ask:
 - Does each section do the job expected in an SCI paper?
 - Are equation numbering and punctuation correct?
 - Are figure, table, and equation references label-based rather than hard-coded?
+- Is every displayed figure and table cited in the main text through its label?
 - Are notation, figures, tables, and references consistent?
 - Does each major comment have a corresponding revision path?

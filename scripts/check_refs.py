@@ -17,6 +17,13 @@ class Finding:
     message: str
 
 
+@dataclass
+class LabeledObject:
+    kind: str
+    label: str
+    line: int
+
+
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 REF_CMD_RE = re.compile(r"\\(?:eqref|ref|pageref|autoref|nameref|cref|Cref|vref|Vref)\{([^}]+)\}")
 
@@ -46,6 +53,7 @@ HARDCODED_PATTERNS = [
 ENV_WITH_LABEL = ("figure", "table", "equation")
 BEGIN_ENV_RE = re.compile(r"\\begin\{([a-zA-Z*]+)\}")
 END_ENV_RE = re.compile(r"\\end\{([a-zA-Z*]+)\}")
+CAPTIONOF_RE = re.compile(r"\\captionof\{(figure|table)\}")
 LOW_SIGNAL_UNUSED_PREFIXES = (
     "eq:",
     "sec:",
@@ -81,10 +89,44 @@ def extract_block(lines: list[str], start: int, env: str) -> tuple[str, int]:
     return "\n".join(parts), len(lines) - 1
 
 
+def collect_labeled_objects(lines: list[str]) -> list[LabeledObject]:
+    objects: list[LabeledObject] = []
+    idx = 0
+
+    while idx < len(lines):
+        text = strip_comments(lines[idx])
+        begin = BEGIN_ENV_RE.search(text)
+        if begin:
+            env = begin.group(1)
+            base_env = env.rstrip("*")
+            if base_env in ("figure", "table"):
+                block, end_idx = extract_block(lines, idx, env)
+                for label in LABEL_RE.findall(block):
+                    objects.append(LabeledObject(base_env, label, idx + 1))
+                idx = end_idx + 1
+                continue
+
+        caption_match = CAPTIONOF_RE.search(text)
+        if caption_match:
+            kind = caption_match.group(1)
+            search_end = min(len(lines), idx + 8)
+            nearby = "\n".join(strip_comments(lines[pos]) for pos in range(idx, search_end))
+            for label in LABEL_RE.findall(nearby):
+                objects.append(LabeledObject(kind, label, idx + 1))
+
+        idx += 1
+
+    deduped: dict[str, LabeledObject] = {}
+    for item in objects:
+        deduped.setdefault(item.label, item)
+    return list(deduped.values())
+
+
 def check_labels(lines: list[str]) -> list[Finding]:
     findings: list[Finding] = []
     labels: dict[str, int] = {}
     refs: set[str] = set()
+    labeled_objects = {item.label: item for item in collect_labeled_objects(lines)}
 
     for idx, line in enumerate(lines, start=1):
         text = strip_comments(line)
@@ -102,8 +144,34 @@ def check_labels(lines: list[str]) -> list[Finding]:
             findings.append(Finding("undefined-ref", 0, f"Undefined label reference `{ref}`."))
 
     for label, line_no in sorted(labels.items(), key=lambda item: item[1]):
+        if label in labeled_objects:
+            continue
         if label not in refs and not label.startswith(LOW_SIGNAL_UNUSED_PREFIXES):
             findings.append(Finding("unused-label", line_no, f"Label `{label}` is never referenced."))
+
+    return findings
+
+
+def check_float_references(lines: list[str]) -> list[Finding]:
+    findings: list[Finding] = []
+    refs: set[str] = set()
+
+    for raw in lines:
+        text = strip_comments(raw)
+        for payload in REF_CMD_RE.findall(text):
+            for ref in [part.strip() for part in payload.split(",") if part.strip()]:
+                refs.add(ref)
+
+    for item in sorted(collect_labeled_objects(lines), key=lambda obj: obj.line):
+        if item.label in refs:
+            continue
+        findings.append(
+            Finding(
+                f"unreferenced-{item.kind}",
+                item.line,
+                f"This {item.kind} is displayed but not cited in the main text through its label `{item.label}`.",
+            )
+        )
 
     return findings
 
@@ -174,6 +242,7 @@ def main() -> int:
     lines = tex_path.read_text(encoding="utf-8").splitlines()
     findings = []
     findings.extend(check_labels(lines))
+    findings.extend(check_float_references(lines))
     findings.extend(check_hardcoded_refs(lines))
     findings.extend(check_env_labels(lines))
     print(render(findings))

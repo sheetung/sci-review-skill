@@ -62,6 +62,7 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
   - unused labels
   - duplicate labels
   - figure, table, and equation environments without labels
+  - displayed figures and tables that are never cited in the main text through their labels
 
 ### `scripts/check_wording.py`
 
@@ -187,6 +188,7 @@ Use this skill when the user wants a reviewer-style pass on an SCI manuscript an
 - Check whether captions are concise and descriptive.
 - Check whether figures and tables support the argument rather than duplicate the text.
 - Check whether figure and table references in the main text use labels such as `Fig.~\ref{...}` and `Table~\ref{...}` rather than hard-coded numbers.
+- Check whether every displayed figure and table is actually cited in the main text after it is introduced.
 - When commenting, suggest whether to tighten captions, rename metrics, replace hard-coded numbers with label references, or rewrite the surrounding discussion.
 
 ### Language and Structure
@@ -249,4 +251,5 @@ Read `references/checklist.md` when:
 - For small wording questions, provide the corrected sentence directly.
 - For equation-related comments, explicitly state whether the issue is numbering, punctuation, sentence integration, notation, or analytical validity.
 - For figure, table, and equation references, explicitly flag hard-coded numbering in the main text and recommend label-based referencing.
+- For figures and tables, explicitly flag displayed items that are never cited in the main text.
 - Keep the final overall summary brief; the main value should be in the section-level comments and revision directions.
